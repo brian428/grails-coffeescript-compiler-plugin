@@ -36,7 +36,6 @@ class CoffeeCompiler
 			System.out.println( " " )
 			System.out.println( "${e.message} in ${file.path}" )
 			System.out.println( " " )
-			//throw new Exception( "${e.message} in ${file.path}" )
 			throw e
 		}
 

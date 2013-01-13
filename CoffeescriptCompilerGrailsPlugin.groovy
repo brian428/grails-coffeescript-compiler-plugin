@@ -1,4 +1,5 @@
 import org.grails.plugins.coffee.compiler.CoffeeCompiler
+import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
 
 class CoffeescriptCompilerGrailsPlugin
 {
@@ -17,13 +18,11 @@ class CoffeescriptCompilerGrailsPlugin
 	def author = "Brian Kotek"
 	def authorEmail = ""
 	def description = '''\
-Simply compiles .coffee source files into .js files. Leaves it to you to use these generated .js files as normal resources, etc.
+A simple CoffeeScript 1.4 compiler plugin. It compiles .coffee source files into .js files. Leaves it to you to use these generated .js files as resources, etc. Full documentation at: https://github.com/brian428/grails-coffeescript-compiler-plugin
 '''
 
 	// URL to the plugin's documentation
-	def documentation = "http://grails.org/plugin/coffeescript-compiler"
-
-	// Extra (optional) plugin metadata
+	def documentation = "https://github.com/brian428/grails-coffeescript-compiler-plugin"
 
 	// License: one of 'APACHE', 'GPL2', 'GPL3'
     def license = "APACHE"
@@ -35,45 +34,23 @@ Simply compiles .coffee source files into .js files. Leaves it to you to use the
 //    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
 
 	// Location of the plugin's issue tracker.
-//    def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPMYPLUGIN" ]
+    def issueManagement = [ system: "Github", url: "https://github.com/brian428/grails-coffeescript-compiler-plugin/issues" ]
 
 	// Online location of the plugin's browseable source code.
-//    def scm = [ url: "http://svn.codehaus.org/grails-plugins/" ]
+    def scm = [ url: "https://github.com/brian428/grails-coffeescript-compiler-plugin" ]
 
 	// Watch for changes to any .coffee files under /src or /web-app to recompile at runtime.
 	def watchedResources = [ "file:./src/*.coffee", "file:./src/**/*.coffee", "file:./web-app/*.coffee", "file:./web-app/**/*.coffee" ]
 
-	// Default CoffeeScript source and output paths
-	String defaultCoffeeSourcePath = "src/coffee"
-	String defaultJsOutputPath = "web-app/js/app"
-
+	// Set up compiler manager. Default paths defined in CoffeeCompilerManager can be overridden with constructor args.
+	def coffeeCompilerManager = new CoffeeCompilerManager()
 	def startUpComplete = false
 
 	def doWithWebDescriptor = { xml ->
 
 		if( !startUpComplete )
 		{
-			def compilePaths
-			if( application.config.containsKey( "coffeescript-compiler" ) )
-				compilePaths = application.config[ "coffeescript-compiler" ]
-			else
-			{
-				def defaultPaths = [ coffeeSourcePath : defaultCoffeeSourcePath, jsOutputPath : defaultJsOutputPath ]
-				compilePaths = [ default : defaultPaths ]
-			}
-
-			compilePaths.each {
-				String configCoffeeSourcePath = defaultCoffeeSourcePath
-				String configJsOutputPath = defaultJsOutputPath
-
-				if( it.value.containsKey( "coffeeSourcePath" ) )
-					configCoffeeSourcePath = it.value.coffeeSourcePath
-				if( it.value.containsKey( "jsOutputPath" ) )
-					configJsOutputPath = it.value.jsOutputPath
-
-				new CoffeeCompiler( configCoffeeSourcePath, configJsOutputPath ).compileAll()
-			}
-
+			coffeeCompilerManager.compileFromConfig( application.config )
 			startUpComplete = true
 		}
 	}
@@ -95,21 +72,7 @@ Simply compiles .coffee source files into .js files. Leaves it to you to use the
 
 		if( changedFile.path.contains( ".coffee" ) )
 		{
-			def normalizedChangedFile = changedFile.path.replace( '\\', '/' )
-			def compilePaths = application.config[ "coffeescript-compiler" ]
-			String configCoffeeSourcePath = defaultCoffeeSourcePath
-			String configJsOutputPath = defaultJsOutputPath
-
-			compilePaths.each {
-				if( it.value.containsKey( "coffeeSourcePath" ) && normalizedChangedFile.contains( it.value.coffeeSourcePath ) )
-				{
-					configCoffeeSourcePath = it.value.coffeeSourcePath
-					if( it.value.containsKey( "jsOutputPath" ) )
-						configJsOutputPath = it.value.jsOutputPath
-				}
-			}
-
-			new CoffeeCompiler( configCoffeeSourcePath, configJsOutputPath ).compileFile( changedFile )
+			coffeeCompilerManager.compileFileFromConfig( changedFile, application.config )
 		}
 	}
 

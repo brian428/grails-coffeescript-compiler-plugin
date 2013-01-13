@@ -24,6 +24,8 @@ class CoffeeCompiler
 
 		String outputFileName = file.path.replace( '\\', '/' ).replace( coffeeSourcePath, jsOutputPath ).replace( ".coffee", ".js" )
 		File outputFile = new File( outputFileName )
+		new File( outputFile.parent ).mkdirs()
+
 		String js
 
 		try {
@@ -34,7 +36,8 @@ class CoffeeCompiler
 			System.out.println( " " )
 			System.out.println( "${e.message} in ${file.path}" )
 			System.out.println( " " )
-			throw new Exception( "${e.message} in ${file.path}" )
+			//throw new Exception( "${e.message} in ${file.path}" )
+			throw e
 		}
 
 		if( js )

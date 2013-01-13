@@ -14,7 +14,7 @@ Add the plugin to the `plugins` block of your `BuildConfig.groovy`:
 runtime ":coffeescript-compiler:0.1"
 ```
 
-By default, the plugin will compile CoffeeScript source files (*.coffee) from `src/coffee/` into JavaScript in `web-app/js/app`. You can override these defaults and specify one or more CoffeeScript source folders and corresponding JavaScript output folders in your `Config.groovy` file:
+By default, the plugin will compile CoffeeScript source files (*.coffee) from `src/coffee/` into JavaScript in `web-app/js/app/`. You can override these defaults and specify one or more CoffeeScript source folders and corresponding JavaScript output folders in your `Config.groovy` file:
 
 ```groovy
 "coffeescript-compiler" {
@@ -28,6 +28,7 @@ By default, the plugin will compile CoffeeScript source files (*.coffee) from `s
 		coffeeSourcePath = "src/coffee/spec"
 		jsOutputPath = "web-app/js/spec"
 	}
+	
 }
 ```
 

@@ -32,5 +32,5 @@ By default, the plugin will compile CoffeeScript source files (`*.coffee`) from 
 }
 ```
 
-At application startup, the plugin will purge all `jsOutputPath` directories and then compile fresh .js files for all .coffee files found under the `coffeeSourcePath` directories. It also monitors any `*.coffee` files found under `src/` and `web-app/`. If a `*.coffee` file is changed, the plugin locates the appropriate `jsOutputPath` and recompiles the JavaScript file.
+At application startup, the plugin will purge all `jsOutputPath` directories and then compile fresh JavaScript files for all CoffeeScript files found under the `coffeeSourcePath` directories. It also monitors any `*.coffee` files found under `src/` and `web-app/`. If a `*.coffee` file is changed, the plugin locates the appropriate `jsOutputPath` and recompiles the JavaScript file.
 

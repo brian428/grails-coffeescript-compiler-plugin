@@ -56,8 +56,8 @@ class CoffeeCompiler
 		def coffeeSource = new File( coffeeSourcePath )
 
 		coffeeSource.eachFileRecurse { File file ->
-			if(  file.isDirectory() ) {
-				new File( file.path.replace( "\\", "/" ).replace( coffeeSourcePath, jsOutputPath ) ).mkdirs()
+			if( file.isDirectory() )
+			{
 				return
 			}
 

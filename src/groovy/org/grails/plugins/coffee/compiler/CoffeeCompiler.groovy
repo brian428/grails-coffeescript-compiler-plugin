@@ -67,7 +67,7 @@ class CoffeeCompiler
 		new File( jsOutputPath ).mkdirs()
 		def coffeeSource = new File( coffeeSourcePath )
 
-		def pool = Executors.newFixedThreadPool( 100 )
+		def pool = Executors.newFixedThreadPool( 10 )
 		def defer = { c -> pool.submit( c as Callable ) }
 
 		coffeeSource.eachFileRecurse { File file ->

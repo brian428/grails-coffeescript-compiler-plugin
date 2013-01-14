@@ -11,7 +11,11 @@
     <repository name='http://repo.grails.org/grails/core' url='http://repo.grails.org/grails/core/' />
     <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
   </repositories>
-  <dependencies />
+  <dependencies>
+    <runtime>
+      <dependency group='ro.isdc.wro4j' name='wro4j-extensions' version='1.6.0' />
+    </runtime>
+  </dependencies>
   <plugins />
   <runtimePluginRequirements />
   <behavior />

@@ -5,6 +5,8 @@ import ro.isdc.wro.extensions.processor.js.UglifyJsProcessor
 import ro.isdc.wro.model.resource.Resource
 import ro.isdc.wro.model.resource.ResourceType
 
+import java.util.concurrent.*
+
 class CoffeeCompiler
 {
 
@@ -65,6 +67,9 @@ class CoffeeCompiler
 		new File( jsOutputPath ).mkdirs()
 		def coffeeSource = new File( coffeeSourcePath )
 
+		def pool = Executors.newFixedThreadPool( 100 )
+		def defer = { c -> pool.submit( c as Callable ) }
+
 		coffeeSource.eachFileRecurse { File file ->
 			if( file.isDirectory() )
 			{
@@ -73,9 +78,19 @@ class CoffeeCompiler
 
 			if( file.path.contains( ".coffee" ) )
 			{
-				compileFile( file, minifyJS )
+				try
+				{
+					defer{ compileFile( file, minifyJS ) }
+				}
+				catch( Exception e )
+				{
+					pool.shutdown()
+					throw e
+				}
 			}
 		}
+
+		pool.shutdown()
 	}
 
 	def minify( File inputFile )

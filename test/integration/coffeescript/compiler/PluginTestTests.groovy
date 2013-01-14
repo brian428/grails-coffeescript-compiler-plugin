@@ -26,6 +26,8 @@ class PluginTestTests {
 	{
 		createValidCoffeeFile( "src/coffee", "testDefaultConfig" )
 		compilerManager.compileFromConfig( [:] )
+		sleep( 1000 ) // Poor-man's thread wait solution
+
 		def jsFile = new File( "web-app/js/app/testDefaultConfig.js" )
 		assertTrue( "Generated file ${jsFile.path} does not exist", jsFile.exists() )
 	}
@@ -36,6 +38,7 @@ class PluginTestTests {
 		createValidCoffeeFile( "src/coffee/app", "testWithConfig" )
 		def config = createPluginConfig( [:], "myApp", "src/coffee/app", "web-app/js/app" )
 		compilerManager.compileFromConfig( config )
+		sleep( 1000 ) // Poor-man's thread wait solution
 
 		def jsFile = new File( "web-app/js/app/testWithConfig.js" )
 		assertTrue( "Generated file ${jsFile.path} does not exist", jsFile.exists() )
@@ -50,6 +53,7 @@ class PluginTestTests {
 
 		def config = createPluginConfig( [:], "myApp", "src/coffee/app", "web-app/js/app" )
 		compilerManager.compileFromConfig( config )
+		sleep( 1500 ) // Poor-man's thread wait solution
 
 		def jsFile
 		jsFile = new File( "web-app/js/app/testCoffeeSourceTree1.js" )
@@ -75,6 +79,7 @@ class PluginTestTests {
 		def config = createPluginConfig( [:], "myApp", "src/coffee/app", "web-app/js/app" )
 		config = createPluginConfig( config, "myTests", "src/coffee/spec", "web-app/js/spec" )
 		compilerManager.compileFromConfig( config )
+		sleep( 2000 ) // Poor-man's thread wait solution
 
 		def jsFile
 		jsFile = new File( "web-app/js/app/testMultipleCoffeeSourceTrees1.js" )
@@ -99,8 +104,8 @@ class PluginTestTests {
 	@Test( expected=WroRuntimeException )
 	void testInvalidCoffeeScript()
 	{
-		createInvalidCoffeeFile( "src/coffee", "myFile" )
-		compilerManager.compileFromConfig( [:] )
+		createInvalidCoffeeFile( "src/coffee", "myBadFile" )
+		compilerManager.compileFileFromConfig( new File( "src/coffee/myBadFile.coffee" ), [:] )
 	}
 
 	@Test

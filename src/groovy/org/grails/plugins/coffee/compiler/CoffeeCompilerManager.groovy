@@ -3,11 +3,13 @@ package org.grails.plugins.coffee.compiler
 
 class CoffeeCompilerManager
 {
+	Boolean minifyJS = false
 	String defaultCoffeeSourcePath = "src/coffee"
 	String defaultJsOutputPath = "web-app/js/app"
 
-	CoffeeCompilerManager( defaultCoffeeSourcePath=null, defaultJsOutputPath=null )
+	CoffeeCompilerManager( minifyJS=false, defaultCoffeeSourcePath=null, defaultJsOutputPath=null )
 	{
+		this.minifyJS = minifyJS
 		if( defaultCoffeeSourcePath )
 			this.defaultCoffeeSourcePath = defaultCoffeeSourcePath
 		if( defaultJsOutputPath )
@@ -35,7 +37,7 @@ class CoffeeCompilerManager
 				configJsOutputPath = it.value.jsOutputPath
 
 			if( new File( configCoffeeSourcePath ).exists() )
-				new CoffeeCompiler( configCoffeeSourcePath, configJsOutputPath ).compileAll()
+				new CoffeeCompiler( configCoffeeSourcePath, configJsOutputPath ).compileAll( minifyJS )
 		}
 	}
 
@@ -66,7 +68,7 @@ class CoffeeCompilerManager
 		}
 
 		if( matched && new File( configCoffeeSourcePath ).exists() )
-			new CoffeeCompiler( configCoffeeSourcePath, configJsOutputPath ).compileFile( file )
+			new CoffeeCompiler( configCoffeeSourcePath, configJsOutputPath ).compileFile( file, minifyJS )
 		else
 			System.out.println( "Could not find a matching coffeeSourcePath for ${file.path}." )
 	}

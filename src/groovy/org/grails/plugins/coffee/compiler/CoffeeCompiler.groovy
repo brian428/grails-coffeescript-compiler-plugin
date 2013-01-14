@@ -1,5 +1,10 @@
 package org.grails.plugins.coffee.compiler
 
+import ro.isdc.wro.extensions.processor.js.CoffeeScriptProcessor
+import ro.isdc.wro.extensions.processor.js.UglifyJsProcessor
+import ro.isdc.wro.model.resource.Resource
+import ro.isdc.wro.model.resource.ResourceType
+
 class CoffeeCompiler
 {
 
@@ -15,7 +20,7 @@ class CoffeeCompiler
 			jsOutputPath = configJsOutputPath
 	}
 
-	def compileFile( file )
+	def compileFile( File file, minifyJS=false )
 	{
 		if( !file )
 			return
@@ -28,11 +33,21 @@ class CoffeeCompiler
 		File outputFile = new File( outputFileName )
 		new File( outputFile.parent ).mkdirs()
 
-		String js
+		Resource resource = Resource.create( file.path, ResourceType.JS );
+		Reader reader = new FileReader( file.path );
+		Writer writer = new FileWriter( outputFile.path );
 
 		try
 		{
-			js = new org.jcoffeescript.JCoffeeScriptCompiler().compile( content )
+			new CoffeeScriptProcessor().process( resource, reader, writer );
+			if( minifyJS )
+			{
+				minify( outputFile )
+				System.out.println( "Compiling and minifying ${file.path} to ${outputFile.path}" )
+			}
+			else
+				System.out.println( "Compiling ${file.path} to ${outputFile.path}" )
+
 		}
 		catch( Exception e )
 		{
@@ -41,14 +56,9 @@ class CoffeeCompiler
 			System.out.println( " " )
 			throw e
 		}
-
-		if( js )
-			outputFile.write( js )
-			System.out.println( "Compiling ${file.path} to ${outputFile.path}" )
-
 	}
 
-	def compileAll()
+	def compileAll( minifyJS=false )
 	{
 		System.out.println( "Purging ${jsOutputPath}..." )
 		new File( jsOutputPath ).deleteDir()
@@ -63,8 +73,28 @@ class CoffeeCompiler
 
 			if( file.path.contains( ".coffee" ) )
 			{
-				compileFile( file )
+				compileFile( file, minifyJS )
 			}
+		}
+	}
+
+	def minify( File inputFile )
+	{
+		File targetFile = new File( inputFile.path )
+		inputFile.renameTo( new File( inputFile.path.replace( ".js", ".tmp" ) ) )
+		inputFile = new File( inputFile.path.replace( ".js", ".tmp" ) )
+
+		try {
+			Resource resource = Resource.create( inputFile.path, ResourceType.JS );
+			Reader reader = new FileReader( inputFile.path );
+			Writer writer = new FileWriter( targetFile.path );
+			new UglifyJsProcessor().process( resource, reader, writer );
+			inputFile.delete()
+		}
+		catch ( Exception e )
+		{
+			inputFile.renameTo( new File( inputFile.path.replace( ".tmp", ".js" ) ) )
+			throw e
 		}
 	}
 

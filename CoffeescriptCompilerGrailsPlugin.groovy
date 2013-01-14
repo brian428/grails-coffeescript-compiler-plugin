@@ -1,3 +1,4 @@
+import grails.util.Environment
 import org.grails.plugins.coffee.compiler.CoffeeCompiler
 import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
 
@@ -47,9 +48,9 @@ A simple CoffeeScript 1.4 compiler plugin. It compiles .coffee source files into
 	def startUpComplete = false
 
 	def doWithWebDescriptor = { xml ->
-
 		if( !startUpComplete )
 		{
+			coffeeCompilerManager.minifyJS = Environment.current == Environment.PRODUCTION
 			coffeeCompilerManager.compileFromConfig( application.config )
 			startUpComplete = true
 		}

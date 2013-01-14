@@ -3,7 +3,7 @@ Grails coffeescript-compiler Plugin
 
 ## Introduction
 
-A simple Grails plugin that compiles [CoffeeScript](http://coffeescript.org/) source files into JavaScript files. It has no resources plugin integration, leaving it to you to integrate the generated JavaScript with the resources plugin in any way you choose. It also maintains the directory structure from your CoffeeScript sources when generating the JavaScript, allowing you to take advantage of deferred class loading with frameworks like [ExtJS](http://www.sencha.com/products/extjs). The plugin uses the CoffeeScript 1.4 compiler through a modified version of the [jcoffeescript](https://github.com/yeungda/jcoffeescript) JAR.
+A simple Grails plugin that compiles [CoffeeScript](http://coffeescript.org/) source files into JavaScript files. It has no resources plugin integration, leaving it to you to integrate the generated JavaScript with the resources plugin in any way you choose. It also maintains the directory structure from your CoffeeScript sources when generating the JavaScript, allowing you to take advantage of deferred class loading with frameworks like [ExtJS](http://www.sencha.com/products/extjs). The plugin uses the WRO4J library.
 
 ## Usage
 Usage of the plugin is very straightforward:
@@ -33,4 +33,6 @@ By default, the plugin will compile CoffeeScript source files (`*.coffee`) from 
 ```
 
 At application startup, the plugin will purge all `jsOutputPath` directories and then compile fresh JavaScript files for all CoffeeScript files found under the `coffeeSourcePath` directories. It also monitors any `*.coffee` files found under `src/` and `web-app/`. If a `*.coffee` file is changed, the plugin locates the appropriate `jsOutputPath` and recompiles the JavaScript file.
+
+In the development environment, the generated JavaScript is unminified. In production, the JavaScript output is minified using the Uglify processor.
 

@@ -1,7 +1,7 @@
 package coffeescript.compiler
 
 import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
-import org.jcoffeescript.JCoffeeScriptCompileException
+import ro.isdc.wro.WroRuntimeException
 
 import static org.junit.Assert.*
 import org.junit.*
@@ -96,7 +96,7 @@ class PluginTestTests {
 		assertTrue( "Generated file ${jsFile.path} does not exist", jsFile.exists() )
 	}
 
-	@Test( expected=JCoffeeScriptCompileException )
+	@Test( expected=WroRuntimeException )
 	void testInvalidCoffeeScript()
 	{
 		createInvalidCoffeeFile( "src/coffee", "myFile" )

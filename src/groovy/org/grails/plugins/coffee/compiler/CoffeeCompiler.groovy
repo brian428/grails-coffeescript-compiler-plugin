@@ -7,14 +7,16 @@ class CoffeeCompiler
 	String coffeeSourcePath = "src/coffee"
 	String jsOutputPath = "web-app/js/app"
 
-	CoffeeCompiler( String configCoffeeSourcePath, String configJsOutputPath ) {
+	CoffeeCompiler( String configCoffeeSourcePath, String configJsOutputPath )
+	{
 		if( configCoffeeSourcePath )
 			coffeeSourcePath = configCoffeeSourcePath
 		if( configJsOutputPath )
 			jsOutputPath = configJsOutputPath
 	}
 
-	def compileFile( file ) {
+	def compileFile( file )
+	{
 		if( !file )
 			return
 
@@ -28,7 +30,8 @@ class CoffeeCompiler
 
 		String js
 
-		try {
+		try
+		{
 			js = new org.jcoffeescript.JCoffeeScriptCompiler().compile( content )
 		}
 		catch( Exception e )
@@ -45,7 +48,8 @@ class CoffeeCompiler
 
 	}
 
-	def compileAll() {
+	def compileAll()
+	{
 		System.out.println( "Purging ${jsOutputPath}..." )
 		new File( jsOutputPath ).deleteDir()
 		new File( jsOutputPath ).mkdirs()

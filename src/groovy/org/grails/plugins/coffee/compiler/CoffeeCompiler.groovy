@@ -13,6 +13,8 @@ class CoffeeCompiler
 	// Default values for CoffeeScript source and JavaScript output paths
 	String coffeeSourcePath = "src/coffee"
 	String jsOutputPath = "web-app/js/app"
+	Long minutesToWaitForComplete = 3
+	Integer threadPoolSize = 10
 
 	CoffeeCompiler( String configCoffeeSourcePath, String configJsOutputPath )
 	{
@@ -67,7 +69,7 @@ class CoffeeCompiler
 		new File( jsOutputPath ).mkdirs()
 		def coffeeSource = new File( coffeeSourcePath )
 
-		def pool = Executors.newFixedThreadPool( 10 )
+		def pool = Executors.newFixedThreadPool( threadPoolSize )
 		def defer = { c -> pool.submit( c as Callable ) }
 
 		coffeeSource.eachFileRecurse { File file ->
@@ -78,19 +80,13 @@ class CoffeeCompiler
 
 			if( file.path.contains( ".coffee" ) )
 			{
-				try
-				{
-					defer{ compileFile( file, minifyJS ) }
-				}
-				catch( Exception e )
-				{
-					pool.shutdown()
-					throw e
-				}
+				defer{ compileFile( file, minifyJS ) }
 			}
 		}
 
 		pool.shutdown()
+		pool.awaitTermination( minutesToWaitForComplete, TimeUnit.MINUTES )
+
 	}
 
 	def minify( File inputFile )

@@ -22,7 +22,25 @@ grails.project.dependency.resolution = {
     }
     dependencies {
 		runtime( "ro.isdc.wro4j:wro4j-extensions:1.6.0" ) {
-			excludes('slf4j-log4j12', 'spring-web', 'gmaven-runtime-1.6', 'servlet-api', 'ant', 'groovy-all')
+			excludes(
+					"slf4j-log4j12",
+					"spring-web",
+					"gmaven-runtime-1.6",
+					"gmaven-runtime-1.7",
+					"servlet-api",
+					"ant",
+					"groovy-all",
+					"jsp-api",
+					"commons-pool",
+					"spring-web",
+					"gson",
+					"closure-compiler",
+					"dojo-shrinksafe",
+					"jruby-complete",
+					"sass-gems",
+					"bourbon-gem-jar",
+					"less4j"
+			)
 		}
     }
 

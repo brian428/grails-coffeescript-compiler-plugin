@@ -72,7 +72,7 @@ class CoffeeCompiler
 		def pool = Executors.newFixedThreadPool( threadPoolSize )
 		def defer = { c -> pool.submit( c as Callable ) }
 
-		coffeeSource.eachFileRecurse { File file ->
+		def eachFileHandler = { File file ->
 			if( file.isDirectory() )
 			{
 				return
@@ -84,9 +84,37 @@ class CoffeeCompiler
 			}
 		}
 
+		def ignoreHidden = { File file ->
+			if( file.isHidden() )
+			{
+				return false;
+			}
+			return true;
+		}
+
+		eachFileRecurse( coffeeSource, eachFileHandler, ignoreHidden )
+
 		pool.shutdown()
 		pool.awaitTermination( minutesToWaitForComplete, TimeUnit.MINUTES )
 
+	}
+
+	def eachFileRecurse( File dir, Closure closure, Closure filter = { return true } )
+	{
+		for( file in dir.listFiles() )
+		{
+			if( filter.call( file ) )
+			{
+				if ( file.isDirectory() )
+				{
+					eachFileRecurse( file, closure, filter );
+				}
+				else
+				{
+					closure.call( file );
+				}
+			}
+		}
 	}
 
 	def minify( File inputFile )

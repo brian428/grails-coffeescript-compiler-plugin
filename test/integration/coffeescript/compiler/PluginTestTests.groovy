@@ -67,6 +67,43 @@ class PluginTestTests {
 	}
 
 	@Test
+	void testCoffeeSourceTreeIgnoresHiddenPaths()
+	{
+		createValidCoffeeFile( "src/coffee/app", "testCoffeeSourceTree1" )
+		createValidCoffeeFile( "src/coffee/app/child", "testCoffeeSourceTree2" )
+		createValidCoffeeFile( "src/coffee/app/child/subchild", "testCoffeeSourceTree3" )
+		createValidCoffeeFile( "src/coffee/app/hidden", "testCoffeeSourceTreeHidden1" )
+		createValidCoffeeFile( "src/coffee/app/hidden/child", "testCoffeeSourceTreeHidden2" )
+
+		// Mark app/hidden folder as hidden on Windows
+		Process p = Runtime.getRuntime().exec( "attrib +H " + new File( "src/coffee/app/hidden" ).getPath() )
+		p.waitFor();
+
+		def config = createPluginConfig( [:], "myApp", "src/coffee/app", "web-app/js/app" )
+		compilerManager.compileFromConfig( config )
+		sleep( 1500 ) // Poor-man's thread wait solution
+
+		def jsFile
+		jsFile = new File( "web-app/js/app/testCoffeeSourceTree1.js" )
+		assertTrue( "Generated file ${jsFile.path} does not exist", jsFile.exists() )
+
+		jsFile = new File( "web-app/js/app/child/testCoffeeSourceTree2.js" )
+		assertTrue( "Generated file ${jsFile.path} does not exist", jsFile.exists() )
+
+		jsFile = new File( "web-app/js/app/child/subchild/testCoffeeSourceTree3.js" )
+		assertTrue( "Generated file ${jsFile.path} does not exist", jsFile.exists() )
+
+		jsFile = new File( "web-app/js/app/testCoffeeSourceTree1.js" )
+		assertTrue( "Generated file ${jsFile.path} does not exist", jsFile.exists() )
+
+		jsFile = new File( "src/coffee/app/hidden/testCoffeeSourceTreeHidden1.js" )
+		assertFalse( "Generated file ${jsFile.path} from hidden source folder should not exist", jsFile.exists() )
+
+		jsFile = new File( "src/coffee/app/hidden/child/testCoffeeSourceTreeHidden2.js" )
+		assertFalse( "Generated file ${jsFile.path} from hidden source folder should not exist", jsFile.exists() )
+	}
+
+	@Test
 	void testMultipleCoffeeSourceTrees()
 	{
 		createValidCoffeeFile( "src/coffee/app", "testMultipleCoffeeSourceTrees1" )

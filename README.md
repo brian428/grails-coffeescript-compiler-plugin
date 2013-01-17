@@ -32,7 +32,7 @@ By default, the plugin will compile CoffeeScript source files (`*.coffee`) from 
 }
 ```
 
-At application startup, the plugin will purge all `jsOutputPath` directories and then compile fresh JavaScript files for all CoffeeScript files found under the `coffeeSourcePath` directories. It also monitors any `*.coffee` files found under `src/` and `web-app/`. If a `*.coffee` file is changed, the plugin locates the appropriate `jsOutputPath` and recompiles the JavaScript file.
+At application startup, the plugin will purge all `jsOutputPath` directories and then compile fresh JavaScript files for all CoffeeScript files found under the `coffeeSourcePath` directories. It also monitors any `*.coffee` files found under `src/` and `web-app/`. If a `*.coffee` file is changed, the plugin locates the appropriate `jsOutputPath` and recompiles the JavaScript file. Files within hidden directories should be ignored by the compiler.
 
 In the development environment, the generated JavaScript is unminified. In production, the JavaScript output is minified using the Uglify processor.
 

@@ -1,11 +1,10 @@
 import grails.util.Environment
-import org.grails.plugins.coffee.compiler.CoffeeCompiler
 import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
 
 class CoffeescriptCompilerGrailsPlugin
 {
 	// the plugin version
-	def version = "0.4"
+	def version = "0.5"
 	// the version or versions of Grails the plugin is designed for
 	def grailsVersion = "2.1 > *"
 	// the other plugins this plugin depends on
@@ -39,6 +38,10 @@ A simple CoffeeScript 1.4 compiler plugin. It compiles .coffee source files into
 
 	// Online location of the plugin's browseable source code.
     def scm = [ url: "https://github.com/brian428/grails-coffeescript-compiler-plugin" ]
+
+	// Don't compile when running Grails tests.
+	def environments = [ excludes:"test" ]
+	def scopes = [ excludes: [ "functional_test", "test" ] ]
 
 	// Watch for changes to any .coffee files under /src or /web-app to recompile at runtime.
 	def watchedResources = [ "file:./src/*.coffee", "file:./src/**/*.coffee", "file:./web-app/*.coffee", "file:./web-app/**/*.coffee" ]

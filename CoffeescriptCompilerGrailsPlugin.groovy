@@ -4,7 +4,7 @@ import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
 class CoffeescriptCompilerGrailsPlugin
 {
 	// the plugin version
-	def version = "0.5"
+	def version = "0.6"
 	// the version or versions of Grails the plugin is designed for
 	def grailsVersion = "2.1 > *"
 	// the other plugins this plugin depends on
@@ -53,7 +53,23 @@ A simple CoffeeScript 1.4 compiler plugin. It compiles .coffee source files into
 	def doWithWebDescriptor = { xml ->
 		if( !startUpComplete )
 		{
-			coffeeCompilerManager.minifyJS = Environment.current == Environment.PRODUCTION
+			def thisPluginConfig = [:]
+
+			if( application.config.containsKey( "coffeescript-compiler" ) && application.config."coffeescript-compiler".containsKey( "pluginConfig" ) )
+			{
+				thisPluginConfig = application.config."coffeescript-compiler".pluginConfig
+				application.config."coffeescript-compiler".remove( "pluginConfig" )
+			}
+
+			if( thisPluginConfig.containsKey( "minifyInEnvironment" ) )
+			{
+				coffeeCompilerManager.minifyJS = thisPluginConfig.minifyInEnvironment.contains( Environment.current.toString() )
+			}
+			else
+			{
+				coffeeCompilerManager.minifyJS = Environment.current == Environment.PRODUCTION
+			}
+
 			coffeeCompilerManager.compileFromConfig( application.config )
 			startUpComplete = true
 		}

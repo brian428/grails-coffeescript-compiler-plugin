@@ -34,5 +34,30 @@ By default, the plugin will compile CoffeeScript source files (`*.coffee`) from 
 
 At application startup, the plugin will purge all `jsOutputPath` directories and then compile fresh JavaScript files for all CoffeeScript files found under the `coffeeSourcePath` directories. It also monitors any `*.coffee` files found under `src/` and `web-app/`. If a `*.coffee` file is changed, the plugin locates the appropriate `jsOutputPath` and recompiles the JavaScript file. Files within hidden directories should be ignored by the compiler.
 
-In the development environment, the generated JavaScript is unminified. In production, the JavaScript output is minified using the Uglify processor. The CoffeeScript compilation is excluded from the "test" and "functional_test" scopes.
+By default, the generated JavaScript is unminified in the `DEVELOPMENT` environment. In `PRODUCTION`, the JavaScript output is minified using the Uglify processor. To change this behavior, you can specify an additional `pluginConfig.minifyInEnvironment` list in the configuration:
 
+```groovy
+"coffeescript-compiler" {
+
+	// Does not minify in any environment...
+	pluginConfig {
+		minifyInEnvironment = []
+	}
+	
+	// CoffeeScript source paths would go here...
+}
+```  
+
+```groovy
+"coffeescript-compiler" {
+
+	// Minify in both DEVELOPMENT and PRODUCTION environments...
+	pluginConfig {
+		minifyInEnvironment = [ "DEVELOPMENT", "PRODUCTION" ]
+	}
+	
+	// CoffeeScript source paths would go here...
+}
+```
+
+The CoffeeScript compilation is excluded from the "test" and "functional_test" scopes. 

@@ -1,4 +1,4 @@
-/coffeescript-compiler-grailsPlugins.iml
+/*.iml
 /.idea
 /.settings
 /.classpath
@@ -6,3 +6,4 @@
 /coffeescript-compiler.iml
 /target
 /out
+/grails-app/i18n

@@ -60,4 +60,42 @@ By default, the generated JavaScript is unminified in the `DEVELOPMENT` environm
 }
 ```
 
-The CoffeeScript compilation is excluded from the "test" and "functional_test" scopes. 
+To cause the compiler to use a "--no-wrap" simply add the following to your config which will cause the resulting JavaScript to **not** include the `.call()` wrapper.
+
+```groovy
+"coffeescript-compiler" {
+	pluginConfig {
+	    wrapJS = false
+	}
+}
+```
+
+**CAUTION** By default the plugin will purge the js folder on startup.  If you wish for your JavaScript and CoffeeScript to live happily together in your application or in the same folder simply add the `purgeJS=false` to the config.
+
+```groovy
+"coffeescript-compiler" {
+	pluginConfig {
+	    purgeJS = false
+	}
+}
+```
+
+By default the plugin on startup will process any `*.coffee` files whose companion `*.js` file has a newer timestamp.  If you wish to disable this feature to skip recompile on startup.
+
+```groovy
+"coffeescript-compiler" {
+	pluginConfig {
+	    overrideJS = false
+	}
+}
+```
+
+The CoffeeScript compilation is excluded from the "test" and "functional_test" scopes.
+
+Which compiler is used?
+-------------------------
+The default compiler is Rhino, but if you have node coffee-script installed that will be used instead.  Hopefully this does not cause any variances amongst environments with and without node coffee-script, but note that is COULD.
+
+If you wish to use node as the default you can install it as the following.
+
+`npm install -g coffee-script`

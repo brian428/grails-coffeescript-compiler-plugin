@@ -1,11 +1,13 @@
-<plugin name='coffeescript-compiler' version='0.13' grailsVersion='2.1 &gt; *'>
+<plugin name='coffeescript-compiler' version='0.7' grailsVersion='2.1 &gt; *'>
   <author>Brian Kotek</author>
   <title>Coffeescript Compiler Plugin</title>
   <description>A simple CoffeeScript 1.4 compiler plugin. It compiles .coffee source files into .js files, and does not require NodeJS or CoffeeScript to be installed on your machine. Leaves you with full control over if/how to use these generated .js files as resources, etc. Full documentation at: https://github.com/brian428/grails-coffeescript-compiler-plugin.
 </description>
   <documentation>https://github.com/brian428/grails-coffeescript-compiler-plugin</documentation>
   <type>CoffeescriptCompilerGrailsPlugin</type>
-  <resources />
+  <resources>
+    <resource>codenarc</resource>
+  </resources>
   <repositories>
     <repository name='grailsCentral' url='http://grails.org/plugins' />
     <repository name='http://repo.grails.org/grails/core' url='http://repo.grails.org/grails/core/' />

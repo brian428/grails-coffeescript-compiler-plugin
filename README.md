@@ -11,7 +11,7 @@ Usage of the plugin is very straightforward:
 Add the plugin to the `plugins` block of your `BuildConfig.groovy`:
 
 ```groovy
-compile ":coffeescript-compiler:0.6"
+compile ":coffeescript-compiler:0.7"
 ```
 
 By default, the plugin will compile CoffeeScript source files (`*.coffee`) from `src/coffee/` into JavaScript in `web-app/js/app/`. You can override these defaults and specify one or more CoffeeScript source folders and corresponding JavaScript output folders in your `Config.groovy` file:
@@ -33,6 +33,8 @@ By default, the plugin will compile CoffeeScript source files (`*.coffee`) from 
 ```
 
 At application startup, the plugin will purge all `jsOutputPath` directories and then compile fresh JavaScript files for all CoffeeScript files found under the `coffeeSourcePath` directories. It also monitors any `*.coffee` files found under `src/` and `web-app/`. If a `*.coffee` file is changed, the plugin locates the appropriate `jsOutputPath` and recompiles the JavaScript file. Files within hidden directories should be ignored by the compiler.
+
+## Additional Configuration Options
 
 By default, the generated JavaScript is unminified in the `DEVELOPMENT` environment. In `PRODUCTION`, the JavaScript output is minified using the Uglify processor. To change this behavior, you can specify an additional `pluginConfig.minifyInEnvironment` list in the configuration:
 
@@ -70,7 +72,7 @@ To cause the compiler to use a "--no-wrap" simply add the following to your conf
 }
 ```
 
-**CAUTION** By default the plugin will purge the js folder on startup.  If you wish for your JavaScript and CoffeeScript to live happily together in your application or in the same folder simply add the `purgeJS=false` to the config.
+**CAUTION** By default the plugin will purge the js output folders on startup.  If you wish to keep your JavaScript and CoffeeScript in the same folder, add `purgeJS=false` to the config:
 
 ```groovy
 "coffeescript-compiler" {
@@ -80,22 +82,31 @@ To cause the compiler to use a "--no-wrap" simply add the following to your conf
 }
 ```
 
-By default the plugin on startup will process any `*.coffee` files whose companion `*.js` file has a newer timestamp.  If you wish to disable this feature to skip recompile on startup.
+By default, the plugin will recompile all `*.coffee` files in the configured source paths. If you would prefer to only process modified `*.coffee` files (where the `.coffee` file's modified timestamp is newer than the companion `.js` file), use `overrideJS=false`. Note that this only matters if `purgeJS=false` has also been set, otherwise there are no existing `.js` files to compare timestamps against, since they will all be purged:
 
 ```groovy
 "coffeescript-compiler" {
 	pluginConfig {
-	    overrideJS = false
+		purgeJS = false
+		overrideJS = false
 	}
 }
 ```
 
-The CoffeeScript compilation is excluded from the "test" and "functional_test" scopes.
+The CoffeeScript compilation is excluded from the `test` and `functional_test` scopes.
 
-Which compiler is used?
--------------------------
-The default compiler is Rhino, but if you have node coffee-script installed that will be used instead.  Hopefully this does not cause any variances amongst environments with and without node coffee-script, but note that is COULD.
+## Logging
 
-If you wish to use node as the default you can install it as the following.
+To see information log output (such as files being compiled), add the appropriate logging key to your log4j configuration in `Config.groovy`:
 
-`npm install -g coffee-script`
+```groovy
+log4j = {
+	info 'org.grails.plugins.coffee.compiler'
+}
+```
+
+## Which CoffeeScript Compiler is Used?
+
+The default compiler uses a bundled version of Rhino, but if you have node coffee-script installed that will be used instead.  Hopefully this does not cause any variances amongst environments with and without node coffee-script, but note that is COULD.
+
+If you wish to use node as the default, install NodeJS. CoffeeScript should be included by default, but if you don't have that module you can install it using `npm install -g coffee-script`.

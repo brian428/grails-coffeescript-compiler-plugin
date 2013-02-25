@@ -11,7 +11,7 @@ Usage of the plugin is very straightforward:
 Add the plugin to the `plugins` block of your `BuildConfig.groovy`:
 
 ```groovy
-compile ":coffeescript-compiler:0.7"
+compile ":coffeescript-compiler:0.8"
 ```
 
 By default, the plugin will compile CoffeeScript source files (`*.coffee`) from `src/coffee/` into JavaScript in `web-app/js/app/`. You can override these defaults and specify one or more CoffeeScript source folders and corresponding JavaScript output folders in your `Config.groovy` file:

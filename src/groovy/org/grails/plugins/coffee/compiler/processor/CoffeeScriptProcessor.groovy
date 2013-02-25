@@ -32,6 +32,7 @@ implements ResourcePreProcessor, ResourcePostProcessor {
     private ResourcePreProcessor resourcePreProcessor
     private Boolean wrapJS = true
 
+
     CoffeeScriptProcessor(Boolean wrapJS) {
         this.wrapJS = wrapJS
     }
@@ -40,7 +41,8 @@ implements ResourcePreProcessor, ResourcePostProcessor {
  * it is not supported, the fallback processor will be used.
  */
     private ResourcePreProcessor initializeProcessor() {
-		def final processor
+		def processor
+
 		if( !forceRhino ) {
 			processor = new ProcessorDecorator(createNodeProcessor())
 			processor.isSupported() ? processor : createRhinoProcessor()
@@ -48,6 +50,8 @@ implements ResourcePreProcessor, ResourcePostProcessor {
 		else {
 			processor = createRhinoProcessor()
 		}
+
+		return processor
     }
 
     /**

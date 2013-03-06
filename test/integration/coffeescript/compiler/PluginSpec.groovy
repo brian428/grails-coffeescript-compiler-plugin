@@ -215,14 +215,14 @@ class PluginSpec extends IntegrationSpec {
 
     }
 
-    def "set the purgeJS flag to default of true and ensure files are purged"() {
+    def "set the purgeJS flag to true and ensure files are purged"() {
         given:
         String coffeePath = "src/coffee/app"
         String javascriptPath = "web-app/js/app"
         File someOtherFile = createValidJavascriptFile(javascriptPath, "testWithConfig2")
 
         when:
-        CoffeeCompilerManager compilerManager = new CoffeeCompilerManager(defaultJsOutputPath: javascriptPath, defaultCoffeeSourcePath: coffeePath)
+        CoffeeCompilerManager compilerManager = new CoffeeCompilerManager(defaultJsOutputPath: javascriptPath, defaultCoffeeSourcePath: coffeePath, purgeJS: true)
 
         then: 'ensure existing js exists still'
         someOtherFile.exists()

@@ -3,7 +3,6 @@ package org.grails.plugins.coffee.compiler
 import org.apache.commons.io.FileUtils
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-import org.grails.plugins.coffee.compiler.processor.CoffeeScriptProcessor
 import ro.isdc.wro.WroRuntimeException
 import ro.isdc.wro.config.Context
 import ro.isdc.wro.config.jmx.WroConfiguration
@@ -16,6 +15,7 @@ import ro.isdc.wro.model.resource.ResourceType
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import org.grails.plugins.coffee.compiler.processor.CoffeeScriptProcessor
 
 class CoffeeCompiler
 {
@@ -65,25 +65,25 @@ class CoffeeCompiler
 			Injector injector = new InjectorBuilder().build()
 			CoffeeScriptProcessor coffee = new CoffeeScriptProcessor( wrapJS )
 			injector.inject( coffee )
+
+			log.info "Compiling ${ minifyJS ? ' and minifying ' : '' } ${ file.path } to ${ outputFile.path }"
 			coffee.process( resource, reader, writer )
 
 			if( minifyJS ) {
 				minify( outputFile )
 			}
 
-			log.info "Compiling ${ minifyJS ? ' and minifying ' : '' } ${ file.path } to ${ outputFile.path }"
-
 		} catch( WroRuntimeException wroRuntimeException ) {
 			FileUtils.deleteQuietly( outputFile )
-			log.error "${ wroRuntimeException.message } in ${ file.path }"
+			log.error "WroRuntimeException: ${ wroRuntimeException.message } in ${ file.path }"
 			throw wroRuntimeException
 		} catch( NullPointerException npe ) {
 			FileUtils.deleteQuietly( outputFile )
-			log.error "${ npe.message } in ${ file.path }"
+			log.error "NullPointerException: ${ npe.message } in ${ file.path }"
 			throw new WroRuntimeException( npe.message, npe )
 		} catch( Exception e ) {
 			FileUtils.deleteQuietly( outputFile )
-			log.error "${ e.message } in ${ file.path }"
+			log.error "Generic Exception: ${ e.message } in ${ file.path }"
 			throw new WroRuntimeException( e.message, e )
 		} finally {
 			reader.close()
@@ -108,11 +108,14 @@ class CoffeeCompiler
 		isJavascriptNewer
 	}
 
-	def compileAll( Boolean minifyJS = false, Boolean purgeJS = true, Boolean wrapJS = true, Boolean overrideJS = true )
+	def compileAll( Boolean minifyJS = false, Boolean purgeJS = false, Boolean wrapJS = true, Boolean overrideJS = true )
 	{
 		if( purgeJS ) {
 			log.info "Purging ${ jsOutputPath }..."
-			new File( jsOutputPath ).deleteDir()
+			new File( jsOutputPath ).eachFileMatch(~/.*\.js/) { f ->
+                log.info "Deleting ${ f.absolutePath }"
+                f.delete()
+            }
 		}
 		new File( jsOutputPath ).mkdirs()
 		def coffeeSource = new File( coffeeSourcePath )

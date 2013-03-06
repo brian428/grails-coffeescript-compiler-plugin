@@ -3,7 +3,7 @@ Grails coffeescript-compiler Plugin
 
 ## Introduction
 
-A simple Grails plugin that compiles [CoffeeScript](http://coffeescript.org/) source files into JavaScript files. It has no resources plugin integration, leaving it to you to integrate the generated JavaScript with the resources plugin in any way you choose. It also maintains the directory structure from your CoffeeScript sources when generating the JavaScript, allowing you to take advantage of deferred class loading with frameworks like [ExtJS](http://www.sencha.com/products/extjs). The plugin uses the WRO4J library.
+A simple Grails plugin that compiles [ CoffeeScript ](http://coffeescript.org/) source files into JavaScript files. It has no resources plugin integration, leaving it to you to integrate the generated JavaScript with the resources plugin in any way you choose. It also maintains the directory structure from your CoffeeScript sources when generating the JavaScript, allowing you to take advantage of deferred class loading with frameworks like [ ExtJS ](http://www.sencha.com/products/extjs). The plugin uses the WRO4J library.
 
 ## Usage
 Usage of the plugin is very straightforward:
@@ -11,7 +11,7 @@ Usage of the plugin is very straightforward:
 Add the plugin to the `plugins` block of your `BuildConfig.groovy`:
 
 ```groovy
-compile ":coffeescript-compiler:0.8.1"
+compile ":coffeescript-compiler:0.9"
 ```
 
 By default, the plugin will compile CoffeeScript source files (`*.coffee`) from `src/coffee/` into JavaScript in `web-app/js/app/`. You can override these defaults and specify one or more CoffeeScript source folders and corresponding JavaScript output folders in your `Config.groovy` file:
@@ -32,7 +32,7 @@ By default, the plugin will compile CoffeeScript source files (`*.coffee`) from 
 }
 ```
 
-At application startup, the plugin will purge all `jsOutputPath` directories and then compile fresh JavaScript files for all CoffeeScript files found under the `coffeeSourcePath` directories. It also monitors any `*.coffee` files found under `src/` and `web-app/`. If a `*.coffee` file is changed, the plugin locates the appropriate `jsOutputPath` and recompiles the JavaScript file. Files within hidden directories should be ignored by the compiler.
+At application startup, the plugin can purge all *.js files `jsOutputPath` directories (see below `purgeJS` docs) and then compile fresh JavaScript files for all CoffeeScript files found under the `coffeeSourcePath` directories. It also monitors any `*.coffee` files found under `src/` and `web-app/`. If a `*.coffee` file is changed, the plugin locates the appropriate `jsOutputPath` and recompiles the JavaScript file. Files within hidden directories should be ignored by the compiler.
 
 ## Additional Configuration Options
 
@@ -50,14 +50,18 @@ By default, the generated JavaScript is unminified in the `DEVELOPMENT` environm
 }
 ```  
 
+To override the default of Production only, specify the environments similar to below.
+
 ```groovy
 "coffeescript-compiler" {
 
 	// Minify in both DEVELOPMENT and PRODUCTION environments...
 	pluginConfig {
-		minifyInEnvironment = [ "DEVELOPMENT", "PRODUCTION" ]
+		minifyInEnvironment = [ Environment.DEVELOPMENT, Environment.PRODUCTION ]
+		//or use string literals
+		//minifyInEnvironment = [ "DEVELOPMENT", "PRODUCTION" ]
 	}
-	
+
 	// CoffeeScript source paths would go here...
 }
 ```
@@ -72,22 +76,21 @@ To cause the compiler to use a "--no-wrap" simply add the following to your conf
 }
 ```
 
-**CAUTION** By default the plugin will purge the js output folders on startup.  If you wish to keep your JavaScript and CoffeeScript in the same folder, add `purgeJS=false` to the config:
+**NOTE** By default the plugin will NOT purge the js output folders on startup (this is a change in behavior in version 0.9).  If you wish to purge the output directory of *.js files on startup add the following:
 
 ```groovy
 "coffeescript-compiler" {
 	pluginConfig {
-	    purgeJS = false
+	    purgeJS = true
 	}
 }
 ```
 
-By default, the plugin will recompile all `*.coffee` files in the configured source paths. If you would prefer to only process modified `*.coffee` files (where the `.coffee` file's modified timestamp is newer than the companion `.js` file), use `overrideJS=false`. Note that this only matters if `purgeJS=false` has also been set, otherwise there are no existing `.js` files to compare timestamps against, since they will all be purged:
+By default, the plugin will recompile all `*.coffee` files in the configured source paths. If you would prefer to only process modified `*.coffee` files (where the `.coffee` file's modified timestamp is newer than the companion `.js` file), use `overrideJS=false`.
 
 ```groovy
 "coffeescript-compiler" {
 	pluginConfig {
-		purgeJS = false
 		overrideJS = false
 	}
 }

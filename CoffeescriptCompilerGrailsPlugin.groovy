@@ -4,7 +4,7 @@ import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
 class CoffeescriptCompilerGrailsPlugin
 {
 	// the plugin version
-	def version = "0.8.1"
+	def version = "0.9"
 	// the version or versions of Grails the plugin is designed for
 	def grailsVersion = "2.1 > *"
 	// the other plugins this plugin depends on
@@ -19,14 +19,15 @@ class CoffeescriptCompilerGrailsPlugin
 			'grails-app/services/**',
 			'grails-app/views/**',
 			'web-app/**',
-			'codenarc.properties'
+			'codenarc.properties',
+			'.travis.yml'
 	]
 
 	def title = "Coffeescript Compiler Plugin" // Headline display name of the plugin
 	def author = "Brian Kotek"
 	def authorEmail = ""
 	def description = '''\
-A simple CoffeeScript 1.4 compiler plugin. It compiles .coffee source files into .js files, and does not require NodeJS or CoffeeScript to be installed on your machine. Leaves you with full control over if/how to use these generated .js files as resources, etc. Full documentation at: https://github.com/brian428/grails-coffeescript-compiler-plugin.
+A simple CoffeeScript compiler plugin. It compiles .coffee source files into .js files, and does not require NodeJS or CoffeeScript to be installed on your machine. (If you have NodeJS installed, the plugin will use it, but if not, it will use an embedded Rhino-based compiler.) Leaves you with full control over if/how to use these generated .js files as resources, etc. Full documentation at: https://github.com/brian428/grails-coffeescript-compiler-plugin.
 '''
 
 	def developers = [
@@ -63,20 +64,17 @@ A simple CoffeeScript 1.4 compiler plugin. It compiles .coffee source files into
 	def startUpComplete = false
 
 	def doWithWebDescriptor = { xml ->
+		//todo: Confirm whether this is needed, since I'm not sure if this runs again if pieces of the Grails conifg are modified?
 		if( !startUpComplete ) {
 			def thisPluginConfig = [ : ]
 
 			if( application?.config?."coffeescript-compiler"?.containsKey( "pluginConfig" ) ) {
 				thisPluginConfig = application.config."coffeescript-compiler".pluginConfig
-				application.config."coffeescript-compiler".remove( "pluginConfig" )
 			}
 
-			coffeeCompilerManager.minifyJS = ( thisPluginConfig.containsKey( "minifyInEnvironment" ) ) ?
-				thisPluginConfig.minifyInEnvironment.contains( Environment.current.toString() ) :
-				Environment.current == Environment.PRODUCTION
-
+			coffeeCompilerManager.minifyJS = getMinifyJSFlag( thisPluginConfig )
 			//default the purge to true
-			coffeeCompilerManager.purgeJS = ( thisPluginConfig.containsKey( "purgeJS" ) ) ? thisPluginConfig.purgeJS as Boolean : true
+			coffeeCompilerManager.purgeJS = ( thisPluginConfig.containsKey( "purgeJS" ) ) ? thisPluginConfig.purgeJS as Boolean : false
 			coffeeCompilerManager.wrapJS = ( thisPluginConfig.containsKey( "wrapJS" ) ) ? thisPluginConfig.wrapJS as Boolean : true
 			coffeeCompilerManager.overrideJS = ( thisPluginConfig.containsKey( "overrideJS" ) ) ? thisPluginConfig.overrideJS as Boolean : true
 			coffeeCompilerManager.compileFromConfig( application.config )
@@ -84,10 +82,23 @@ A simple CoffeeScript 1.4 compiler plugin. It compiles .coffee source files into
 		}
 	}
 
+	/**
+	 * Will only minifyJS in configured environments or production of config is left out.
+	 * @param config The application config
+	 * @return Boolean if current environment matches one in the config
+	 */
+	Boolean getMinifyJSFlag( config )
+	{
+		config?.containsKey( "minifyInEnvironment" ) ?
+			config.minifyInEnvironment.intersect( [ Environment.current, Environment.current.toString() ] ).size() > 0 :
+			Environment.current == Environment.PRODUCTION
+	}
+
 	def onChange = { event ->
 		def changedFile = event.source.file
 
 		if( changedFile.path.contains( ".coffee" ) ) {
+			log.debug "Recompiling file: ${ changedFile.path }"
 			coffeeCompilerManager.compileFileFromConfig( changedFile, application.config )
 		}
 	}

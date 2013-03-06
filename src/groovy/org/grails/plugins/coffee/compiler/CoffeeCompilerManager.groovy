@@ -9,7 +9,7 @@ class CoffeeCompilerManager
 	private static final Log log = LogFactory.getLog( CoffeeCompilerManager )
 
 	Boolean minifyJS = false
-	Boolean purgeJS = true
+	Boolean purgeJS = false
 	Boolean wrapJS = true
 	Boolean overrideJS = true
 	String defaultCoffeeSourcePath = 'src/coffee'

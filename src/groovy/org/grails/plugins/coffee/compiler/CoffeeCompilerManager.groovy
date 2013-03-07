@@ -33,12 +33,15 @@ class CoffeeCompilerManager
 		log.debug "wrapJS: ${ wrapJS }"
 
 		compilePaths.each {
-			String configCoffeeSourcePath = it.value.containsKey( 'coffeeSourcePath' ) ? it.value.coffeeSourcePath : defaultCoffeeSourcePath
-			String configJsOutputPath = it.value.containsKey( 'jsOutputPath' ) ? it.value.jsOutputPath : defaultJsOutputPath
+			if( it.key != "pluginConfig" )
+			{
+				String configCoffeeSourcePath = it.value.containsKey( 'coffeeSourcePath' ) ? it.value.coffeeSourcePath : defaultCoffeeSourcePath
+				String configJsOutputPath = it.value.containsKey( 'jsOutputPath' ) ? it.value.jsOutputPath : defaultJsOutputPath
 
-			if( new File( configCoffeeSourcePath ).exists() ) {
-				log.info "Compiling CoffeeScript path ${ configCoffeeSourcePath } to ${ configJsOutputPath }"
-				new CoffeeCompiler( configCoffeeSourcePath, configJsOutputPath ).compileAll( minifyJS, purgeJS, wrapJS, overrideJS )
+				if( new File( configCoffeeSourcePath ).exists() ) {
+					log.info "Compiling CoffeeScript path ${ configCoffeeSourcePath } to ${ configJsOutputPath }"
+					new CoffeeCompiler( configCoffeeSourcePath, configJsOutputPath ).compileAll( minifyJS, purgeJS, wrapJS, overrideJS )
+				}
 			}
 		}
 	}

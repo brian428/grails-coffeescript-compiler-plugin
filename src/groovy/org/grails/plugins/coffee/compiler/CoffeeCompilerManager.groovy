@@ -57,7 +57,7 @@ class CoffeeCompilerManager
 		String configJsOutputPath = defaultJsOutputPath
 
 		compilePaths.each {
-			if( !matched && it.value.containsKey( 'coffeeSourcePath' ) && normalizedChangedFilePath.contains( it.value.coffeeSourcePath ) ) {
+			if( !matched && it.key != "pluginConfig" && it.value.containsKey( 'coffeeSourcePath' ) && normalizedChangedFilePath.contains( it.value.coffeeSourcePath ) ) {
 				configCoffeeSourcePath = it.value.coffeeSourcePath
 				if( it.value.containsKey( 'jsOutputPath' ) ) {
 					configJsOutputPath = it.value.jsOutputPath

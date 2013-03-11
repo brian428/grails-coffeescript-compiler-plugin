@@ -110,6 +110,6 @@ log4j = {
 
 ## Which CoffeeScript Compiler is Used?
 
-The default compiler uses a bundled version of Rhino, but if you have node coffee-script installed that will be used instead.  Hopefully this does not cause any variances amongst environments with and without node coffee-script, but note that is COULD.
+The default compiler uses a bundled version of Rhino, but if you have node coffee-script installed that will be used instead.  Hopefully this does not cause any variances amongst environments with and without node coffee-script, but note that it COULD.
 
 If you wish to use node as the default, install NodeJS. CoffeeScript should be included by default, but if you don't have that module you can install it using `npm install -g coffee-script`.

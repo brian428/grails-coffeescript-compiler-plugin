@@ -1,6 +1,8 @@
 Grails coffeescript-compiler Plugin
 ===================================
 
+[![Build Status](https://travis-ci.org/brian428/grails-coffeescript-compiler-plugin.png?branch=master)](https://travis-ci.org/brian428/grails-coffeescript-compiler-plugin)
+
 ## Introduction
 
 A simple Grails plugin that compiles [ CoffeeScript ](http://coffeescript.org/) source files into JavaScript files. It has no resources plugin integration, leaving it to you to integrate the generated JavaScript with the resources plugin in any way you choose. It also maintains the directory structure from your CoffeeScript sources when generating the JavaScript, allowing you to take advantage of deferred class loading with frameworks like [ ExtJS ](http://www.sencha.com/products/extjs). The plugin uses the WRO4J library.

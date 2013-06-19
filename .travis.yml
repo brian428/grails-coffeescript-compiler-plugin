@@ -4,5 +4,5 @@ jdk:
 branches:
   only:
     - master
-script: ./grailsw refresh-dependencies
-  && ./grailsw "test-app integration:"
+script: sudo ./grailsw refresh-dependencies
+  && sudo ./grailsw "test-app integration:"

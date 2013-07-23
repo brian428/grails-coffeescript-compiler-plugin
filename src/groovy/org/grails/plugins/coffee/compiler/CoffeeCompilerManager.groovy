@@ -2,6 +2,7 @@ package org.grails.plugins.coffee.compiler
 
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
+import org.grails.plugins.coffee.compiler.processor.CoffeeScriptProcessor
 
 class CoffeeCompilerManager
 {
@@ -12,6 +13,7 @@ class CoffeeCompilerManager
 	Boolean purgeJS = false
 	Boolean wrapJS = true
 	Boolean overrideJS = true
+	Boolean forceRhino = true
 	String defaultCoffeeSourcePath = 'src/coffee'
 	String defaultJsOutputPath = 'web-app/js/app'
 
@@ -31,7 +33,9 @@ class CoffeeCompilerManager
 		log.debug "purgeJS: ${ purgeJS }"
 		log.debug "overrideJS: ${ overrideJS }"
 		log.debug "wrapJS: ${ wrapJS }"
+		log.debug "forceRhino: ${ forceRhino }"
 
+        CoffeeScriptProcessor.forceRhino = this.forceRhino
 		compilePaths.each {
 			if( it.key != "pluginConfig" )
 			{

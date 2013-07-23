@@ -80,6 +80,7 @@ A simple CoffeeScript compiler plugin. It compiles .coffee source files into .js
 			coffeeCompilerManager.purgeJS = ( thisPluginConfig.containsKey( "purgeJS" ) ) ? thisPluginConfig.purgeJS as Boolean : false
 			coffeeCompilerManager.wrapJS = ( thisPluginConfig.containsKey( "wrapJS" ) ) ? thisPluginConfig.wrapJS as Boolean : true
 			coffeeCompilerManager.overrideJS = ( thisPluginConfig.containsKey( "overrideJS" ) ) ? thisPluginConfig.overrideJS as Boolean : true
+			coffeeCompilerManager.forceRhino = ( thisPluginConfig.containsKey( "forceRhino" ) ) ? thisPluginConfig.forceRhino as Boolean : false
 			coffeeCompilerManager.compileFromConfig( application.config )
 			startUpComplete = true
 		}

@@ -1,5 +1,6 @@
 package org.grails.plugins.coffee.compiler
 
+import grails.util.Holders
 import org.apache.commons.io.FileUtils
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
@@ -39,6 +40,9 @@ class CoffeeCompiler
 		if( !file ) {
 			return
 		}
+
+		// Force current thread class loader to ensure Wro4j classes are available to the compiler.
+		Thread.currentThread().setContextClassLoader( Holders.grailsApplication.classLoader )
 
 		String outputFileName = file.path.replace( '\\', '/' ).replace( coffeeSourcePath, jsOutputPath ).replace( '.coffee', '.js' )
 

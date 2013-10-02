@@ -13,7 +13,7 @@ Usage of the plugin is very straightforward:
 Add the plugin to the `plugins` block of your `BuildConfig.groovy`:
 
 ```groovy
-compile ":coffeescript-compiler:0.9.3"
+compile ":coffeescript-compiler:0.9.4"
 ```
 
 By default, the plugin will compile CoffeeScript source files (`*.coffee`) from `src/coffee/` into JavaScript in `web-app/js/app/`. You can override these defaults and specify one or more CoffeeScript source folders and corresponding JavaScript output folders in your `Config.groovy` file:
@@ -35,6 +35,21 @@ By default, the plugin will compile CoffeeScript source files (`*.coffee`) from 
 ```
 
 At application startup, the plugin can purge all *.js files `jsOutputPath` directories (see below `purgeJS` docs) and then compile fresh JavaScript files for all CoffeeScript files found under the `coffeeSourcePath` directories. It also monitors any `*.coffee` files found under `src/` and `web-app/`. If a `*.coffee` file is changed, the plugin locates the appropriate `jsOutputPath` and recompiles the JavaScript file. Files within hidden directories should be ignored by the compiler.
+
+## Special Note for Grails 2.2.x and Up, When Resources Plugin Is Used
+
+There's a strange issue with the newer versions of the Resources plugin. I've created issues in the Grails and Resources plugin issue trackers to try and deal with the problem. In the meantime, runtime compilation of .coffee files will log an error from the Resources plugin. This doesn't really affect the running app, but it is annoying. One option is to remove the Resoruces plugin while you develop. Or, if you want to suppress these errors, you can edit the `environment` section of your `Config.groovy` so that it looks like:
+
+```groovy
+environments {
+    development {
+        // Specify path for your generated .js files to force Resources plugin to bypass them...
+        ResourcesGrailsPlugin.RELOADABLE_RESOURCE_EXCLUDES.push( "**/js/app/**/*.js" )
+        ...
+    }
+    ...
+}
+```
 
 ## Additional Configuration Options
 

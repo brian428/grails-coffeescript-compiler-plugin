@@ -3,13 +3,9 @@ import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
 
 class CoffeescriptCompilerGrailsPlugin
 {
-	// the plugin version
-	def version = "0.9.3"
-	// the version or versions of Grails the plugin is designed for
+	def version = "0.9.4"
 	def grailsVersion = "2.1 > *"
-	// the other plugins this plugin depends on
 	def dependsOn = [ : ]
-	// resources that are excluded from plugin packaging
 	def pluginExcludes = [
 			'grails-app/conf/spring/resources.groovy',
 			'grails-app/conf/codenarc.groovy',
@@ -26,7 +22,7 @@ class CoffeescriptCompilerGrailsPlugin
 			'wrapper/**'
 	]
 
-	def title = "Coffeescript Compiler Plugin" // Headline display name of the plugin
+	def title = "Coffeescript Compiler Plugin"
 	def author = "Brian Kotek"
 	def authorEmail = ""
 	def description = '''\
@@ -34,28 +30,15 @@ A simple CoffeeScript compiler plugin. It compiles .coffee source files into .js
 '''
 
 	def developers = [
-			[ name: "Christian Oestreich", email: "acetrike@gmail.com" ]
+		[ name: "Christian Oestreich", email: "acetrike@gmail.com" ]
 	]
 
-	// URL to the plugin's documentation
 	def documentation = "https://github.com/brian428/grails-coffeescript-compiler-plugin"
-
-	// License: one of 'APACHE', 'GPL2', 'GPL3'
 	def license = "APACHE"
-
-	// Details of company behind the plugin (if there is one)
 	def organization = [ name: "Brian Kotek", url: "http://www.briankotek.com/" ]
-
-	// Any additional developers beyond the author specified above.
-//    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
-
-	// Location of the plugin's issue tracker.
 	def issueManagement = [ system: "Github", url: "https://github.com/brian428/grails-coffeescript-compiler-plugin/issues" ]
-
-	// Online location of the plugin's browseable source code.
 	def scm = [ url: "https://github.com/brian428/grails-coffeescript-compiler-plugin" ]
 
-	// Don't compile when running Grails tests.
 	def environments = [ excludes: "test" ]
 	def scopes = [ excludes: [ "functional_test", "test" ] ]
 
@@ -99,6 +82,7 @@ A simple CoffeeScript compiler plugin. It compiles .coffee source files into .js
 	}
 
 	def onChange = { event ->
+
 		def changedFile = event.source.file
 
 		if( changedFile.path.contains( ".coffee" ) ) {

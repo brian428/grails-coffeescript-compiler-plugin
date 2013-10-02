@@ -31,7 +31,6 @@ grails.project.dependency.resolution = {
 					"ant",
 					"groovy-all",
 					"jsp-api",
-					"commons-pool",
 					"spring-web",
 					"gson",
 					"closure-compiler",
@@ -46,8 +45,7 @@ grails.project.dependency.resolution = {
 	}
 
 	plugins {
-		build( ":tomcat:$grailsVersion",
-				":release:2.0.3",
+		build( ":release:2.0.3",
 				":rest-client-builder:1.0.2" ) {
 			export = false
 		}

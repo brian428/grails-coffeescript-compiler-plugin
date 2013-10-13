@@ -20,7 +20,7 @@ class CoffeeCompilerManager
 	def compileFromConfig( config )
 	{
 		def compilePaths
-		if( config.containsKey( 'coffeescript-compiler' ) ) {
+		if( config[ 'coffeescript-compiler' ] ) {
 			compilePaths = config[ 'coffeescript-compiler' ]
 		}
 		else {
@@ -39,8 +39,8 @@ class CoffeeCompilerManager
 		compilePaths.each {
 			if( it.key != "pluginConfig" )
 			{
-				String configCoffeeSourcePath = it.value.containsKey( 'coffeeSourcePath' ) ? it.value.coffeeSourcePath : defaultCoffeeSourcePath
-				String configJsOutputPath = it.value.containsKey( 'jsOutputPath' ) ? it.value.jsOutputPath : defaultJsOutputPath
+				String configCoffeeSourcePath = it.value.coffeeSourcePath ?: defaultCoffeeSourcePath
+				String configJsOutputPath = it.value.jsOutputPath ?: defaultJsOutputPath
 
 				if( new File( configCoffeeSourcePath ).exists() ) {
 					log.info "Compiling CoffeeScript path ${ configCoffeeSourcePath } to ${ configJsOutputPath }"
@@ -52,8 +52,7 @@ class CoffeeCompilerManager
 
 	def compileFileFromConfig( File file, config )
 	{
-		def compilePaths = config.containsKey( 'coffeescript-compiler' ) ?
-			config[ 'coffeescript-compiler' ] : [ default: [ coffeeSourcePath: defaultCoffeeSourcePath, jsOutputPath: defaultJsOutputPath ] ]
+		def compilePaths = config[ 'coffeescript-compiler' ] ?: [ default: [ coffeeSourcePath: defaultCoffeeSourcePath, jsOutputPath: defaultJsOutputPath ] ]
 
 		def normalizedChangedFilePath = file.path.replace( '\\', '/' )
 		def matched = false
@@ -61,9 +60,9 @@ class CoffeeCompilerManager
 		String configJsOutputPath = defaultJsOutputPath
 
 		compilePaths.each {
-			if( !matched && it.key != "pluginConfig" && it.value.containsKey( 'coffeeSourcePath' ) && normalizedChangedFilePath.contains( it.value.coffeeSourcePath ) ) {
+			if( !matched && it.key != "pluginConfig" && it.value.coffeeSourcePath && normalizedChangedFilePath.contains( it.value.coffeeSourcePath ) ) {
 				configCoffeeSourcePath = it.value.coffeeSourcePath
-				if( it.value.containsKey( 'jsOutputPath' ) ) {
+				if( it.value.jsOutputPath ) {
 					configJsOutputPath = it.value.jsOutputPath
 				}
 				matched = true

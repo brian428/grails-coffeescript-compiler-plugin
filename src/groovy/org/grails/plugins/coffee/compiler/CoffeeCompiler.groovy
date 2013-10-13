@@ -1,9 +1,16 @@
 package org.grails.plugins.coffee.compiler
 
 import grails.util.Holders
+
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+
 import org.apache.commons.io.FileUtils
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
+import org.grails.plugins.coffee.compiler.processor.CoffeeScriptProcessor
+
 import ro.isdc.wro.WroRuntimeException
 import ro.isdc.wro.config.Context
 import ro.isdc.wro.config.jmx.WroConfiguration
@@ -13,21 +20,16 @@ import ro.isdc.wro.model.group.processor.InjectorBuilder
 import ro.isdc.wro.model.resource.Resource
 import ro.isdc.wro.model.resource.ResourceType
 
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import org.grails.plugins.coffee.compiler.processor.CoffeeScriptProcessor
-
 class CoffeeCompiler
 {
 
-	private static final Log log = LogFactory.getLog( CoffeeCompiler.class )
+	private static final Log log = LogFactory.getLog( CoffeeCompiler )
 
 	// Default values for CoffeeScript source and JavaScript output paths
 	String coffeeSourcePath = 'src/coffee'
 	String jsOutputPath = 'web-app/js/app'
-	private final Long MINUTES_TO_WAIT_FOR_COMPLETE = 3
-	private final Integer THREAD_POOL_SIZE = 10
+	private static final Long MINUTES_TO_WAIT_FOR_COMPLETE = 3
+	private static final Integer THREAD_POOL_SIZE = 10
 
 	CoffeeCompiler( String configCoffeeSourcePath, String configJsOutputPath )
 	{

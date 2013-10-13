@@ -38,7 +38,7 @@ At application startup, the plugin can purge all *.js files `jsOutputPath` direc
 
 ## Special Note for Grails 2.2.x and Up, When Resources Plugin Is Used
 
-There's a strange issue with the newer versions of the Resources plugin. I've created issues in the Grails and Resources plugin issue trackers to try and deal with the problem. In the meantime, runtime compilation of .coffee files will log an error from the Resources plugin. This doesn't really affect the running app, but it is annoying. One option is to remove the Resoruces plugin while you develop. Or, if you want to suppress these errors, you can edit the `environment` section of your `Config.groovy` so that it looks like:
+There's a strange issue with the newer versions of the Resources plugin. I've created issues in the Grails and Resources plugin issue trackers to try and deal with the problem. In the meantime, runtime compilation of .coffee files will log an error from the Resources plugin. This doesn't really affect the running app, but it is annoying. One option is to remove the Resources plugin while you develop. Or, if you want to suppress these errors, you can edit the `environment` section of your `Config.groovy` so that it looks like:
 
 ```groovy
 environments {

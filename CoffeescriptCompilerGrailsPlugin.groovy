@@ -5,31 +5,21 @@ class CoffeescriptCompilerGrailsPlugin
 {
 	def version = "0.9.4"
 	def grailsVersion = "2.1 > *"
-	def dependsOn = [ : ]
 	def pluginExcludes = [
-			'grails-app/conf/spring/resources.groovy',
 			'grails-app/conf/codenarc.groovy',
 			'grails-app/conf/codenarc.ruleset.all.groovy.txt',
 			'grails-app/domain/**',
 			'grails-app/i18n/**',
 			'grails-app/services/**',
 			'grails-app/views/**',
-			'web-app/**',
-			'codenarc.properties',
-			'.travis.yml',
-			'grailsw',
-			'grailsw.bat',
-			'wrapper/**'
+			'web-app/**'
 	]
 
 	def title = "Coffeescript Compiler Plugin"
-	def author = "Brian Kotek"
-	def authorEmail = ""
-	def description = '''\
-A simple CoffeeScript compiler plugin. It compiles .coffee source files into .js files, and does not require NodeJS or CoffeeScript to be installed on your machine. (If you have NodeJS installed, the plugin will use it, but if not, it will use an embedded Rhino-based compiler.) Leaves you with full control over if/how to use these generated .js files as resources, etc. Full documentation at: https://github.com/brian428/grails-coffeescript-compiler-plugin.
-'''
+	def description = 'A simple CoffeeScript compiler plugin. It compiles .coffee source files into .js files, and does not require NodeJS or CoffeeScript to be installed on your machine. (If you have NodeJS installed, the plugin will use it, but if not, it will use an embedded Rhino-based compiler.) Leaves you with full control over if/how to use these generated .js files as resources, etc. Full documentation at: https://github.com/brian428/grails-coffeescript-compiler-plugin.'
 
 	def developers = [
+		[ name: "Brian Kotek", email: "" ],
 		[ name: "Christian Oestreich", email: "acetrike@gmail.com" ]
 	]
 

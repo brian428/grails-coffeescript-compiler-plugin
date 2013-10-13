@@ -35,7 +35,7 @@ class CoffeeCompilerManager
 		log.debug "wrapJS: ${ wrapJS }"
 		log.debug "forceRhino: ${ forceRhino }"
 
-        CoffeeScriptProcessor.forceRhino = this.forceRhino
+		CoffeeScriptProcessor.forceRhino = this.forceRhino
 		compilePaths.each {
 			if( it.key != "pluginConfig" )
 			{

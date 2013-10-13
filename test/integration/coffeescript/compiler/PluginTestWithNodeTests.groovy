@@ -3,7 +3,6 @@ package coffeescript.compiler
 import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
 import org.grails.plugins.coffee.compiler.processor.CoffeeScriptProcessor
 import org.junit.Before
-import org.junit.Ignore
 
 class PluginTestWithNodeTests extends PluginTestBase
 {

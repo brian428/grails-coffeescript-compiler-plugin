@@ -1,13 +1,13 @@
-package coffeescript.compiler;
+package coffeescript.compiler
 
+import static org.junit.Assert.assertFalse
+import static org.junit.Assert.assertTrue
 
 import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
 import org.junit.After
 import org.junit.Test
-import ro.isdc.wro.WroRuntimeException
 
-import static org.junit.Assert.assertFalse
-import static org.junit.Assert.assertTrue
+import ro.isdc.wro.WroRuntimeException
 
 /**
  */
@@ -100,7 +100,7 @@ abstract class PluginTestBase
 		// Mark app/hidden folder as hidden on Windows
 		if( System.getProperty( "os.name" ).contains( "Windows" ) ) {
 			Process p = Runtime.runtime.exec( "attrib +H " + new File( "src/coffee/app/hidden" ).getPath() )
-			p.waitFor();
+			p.waitFor()
 		}
 
 		def config = createPluginConfig( [ : ], "myApp", "src/coffee/app", "web-app/js/app" )
@@ -228,7 +228,7 @@ abstract class PluginTestBase
         someFunctionCall( someVar, [ 'element1', 'element2' ] )
         """
 		new File( path ).mkdirs()
-		File file = new File( "${ path }/${ name }.coffee" )
+		File file = new File(path, "${ name }.coffee" )
 		file << content
 		assertTrue "valid coffee file exists", file.exists()
 	}
@@ -240,7 +240,7 @@ abstract class PluginTestBase
         someFunctionCall( someVar, [ 'element1', 'element2' )
         """
 		new File( path ).mkdirs()
-		File file = new File( "${ path }/${ name }.coffee" )
+		File file = new File(path,  "${ name }.coffee" )
 		file << content
 		assertTrue "bad coffee file exists", file.exists()
 	}

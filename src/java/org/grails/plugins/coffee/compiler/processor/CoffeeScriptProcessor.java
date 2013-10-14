@@ -71,8 +71,10 @@ public class CoffeeScriptProcessor
         else {
             processor = new ProcessorDecorator( createNodeProcessor() );
             isNodeProcessor = processor.isSupported();
-            if( !processor.isSupported() ) {
+            if( !isNodeProcessor ) {
+                LOG.debug( "Node CoffeeScript is not supported. Using fallback Rhino processor" );
                 processor = new ProcessorDecorator( createRhinoProcessor() );
+                forceRhino = true;
             }
         }
         return processor;
@@ -124,7 +126,6 @@ public class CoffeeScriptProcessor
      */
     ResourcePreProcessor createRhinoProcessor()
     {
-        LOG.debug( "Node CoffeeScript is not supported. Using fallback Rhino processor" );
         return new LazyProcessorDecorator( new LazyInitializer<ResourcePreProcessor>()
         {
             @Override

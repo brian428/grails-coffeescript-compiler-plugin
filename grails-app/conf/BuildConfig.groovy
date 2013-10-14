@@ -1,25 +1,16 @@
-grails.project.class.dir = "target/classes"
-grails.project.test.class.dir = "target/test-classes"
-grails.project.test.reports.dir = "target/test-reports"
+grails.project.work.dir = 'target'
 
 grails.project.dependency.resolution = {
-	// inherit Grails' default dependencies
-	inherits( "global" ) {
-		// uncomment to disable ehcache
-		// excludes 'ehcache'
-	}
-	log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+
+	inherits 'global'
+	log 'warn'
+
 	repositories {
 		grailsCentral()
-		// uncomment the below to enable remote dependency resolution
-		// from public Maven repositories
 		mavenLocal()
 		mavenCentral()
-		//mavenRepo "http://snapshots.repository.codehaus.org"
-		//mavenRepo "http://repository.codehaus.org"
-		//mavenRepo "http://download.java.net/maven/2/"
-		//mavenRepo "http://repository.jboss.com/maven2/"
 	}
+
 	dependencies {
 		compile( "ro.isdc.wro4j:wro4j-extensions:1.6.2" ) {
 			excludes(
@@ -41,15 +32,12 @@ grails.project.dependency.resolution = {
 					"less4j"
 			)
 		}
-		//test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
 	}
 
 	plugins {
-		build( ":release:2.0.3",
-				":rest-client-builder:1.0.2" ) {
+		build ':release:2.2.1', ':rest-client-builder:1.0.3', {
 			export = false
 		}
-
 		test( ":spock:0.6",
 				":code-coverage:1.2.5",
 				":codenarc:0.17" ) {
@@ -78,4 +66,3 @@ codenarc {
 		}
 	}
 }
-

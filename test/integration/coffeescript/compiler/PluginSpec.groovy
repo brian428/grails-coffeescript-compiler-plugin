@@ -207,7 +207,7 @@ class PluginSpec extends IntegrationSpec {
         sleep(1000) // Poor-man's thread wait solution
 
         then:
-        new File("${javascriptPath}/testWithConfig.js").exists()
+        new File(javascriptPath, "testWithConfig.js").exists()
         someOtherFile.exists()
 
         and: 'file contains correct syntax'
@@ -234,7 +234,7 @@ class PluginSpec extends IntegrationSpec {
         sleep(1000) // Poor-man's thread wait solution
 
         then: 'coffee to js exists but other original js file does not'
-        def javascriptFile = new File("${javascriptPath}/testWithConfig.js")
+        def javascriptFile = new File(javascriptPath, "testWithConfig.js")
         javascriptFile.exists()
         !someOtherFile.exists()
 
@@ -250,7 +250,7 @@ class PluginSpec extends IntegrationSpec {
 
         when:
         createInvalidCoffeeFile(coffeePath, "myBadFile")
-        compilerManager.compileFileFromConfig(new File("${coffeePath}/myBadFile.coffee"), [:])
+        compilerManager.compileFileFromConfig(new File(coffeePath, "myBadFile.coffee"), [:])
 
         then:
         thrown(WroRuntimeException)
@@ -271,7 +271,7 @@ class PluginSpec extends IntegrationSpec {
 alert('hello');
 """
         new File(path).mkdirs()
-        File file = new File("${path}/${name}.js")
+        File file = new File(path, "${name}.js")
         file.setWritable(true)
         file << content
         assert file.exists()
@@ -284,7 +284,7 @@ someVar = 'my var value'
 someFunctionCall( someVar, [ 'element1', 'element2' ] )
 """
         new File(path).mkdirs()
-        File file = new File("${path}/${name}.coffee")
+        File file = new File(path, "${name}.coffee")
         file.setWritable(true)
         file << content
         assert file.exists()
@@ -297,7 +297,7 @@ someVar = 'my var value'
 someFunctionCall( someVar, [ 'element1', 'element2' )
 """
         new File(path).mkdirs()
-        File file = new File("${path}/${name}.coffee")
+        File file = new File(path, "${name}.coffee")
         file.setWritable(true)
         file << content
         assert file.exists()

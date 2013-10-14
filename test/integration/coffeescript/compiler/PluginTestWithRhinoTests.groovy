@@ -1,14 +1,11 @@
 package coffeescript.compiler
 
-import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
-import org.grails.plugins.coffee.compiler.processor.CoffeeScriptProcessor
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
-import ro.isdc.wro.WroRuntimeException
-
 import static org.junit.Assert.assertFalse
 import static org.junit.Assert.assertTrue
+
+import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
+import org.grails.plugins.coffee.compiler.processor.CoffeeScriptProcessor
+import org.junit.Before
 
 class PluginTestWithRhinoTests extends PluginTestBase
 {

@@ -54,6 +54,7 @@ class CoffeescriptCompilerGrailsPlugin
 			coffeeCompilerManager.wrapJS = ( thisPluginConfig.containsKey( "wrapJS" ) ) ? thisPluginConfig.wrapJS as Boolean : true
 			coffeeCompilerManager.overrideJS = ( thisPluginConfig.containsKey( "overrideJS" ) ) ? thisPluginConfig.overrideJS as Boolean : true
 			coffeeCompilerManager.forceRhino = ( thisPluginConfig.containsKey( "forceRhino" ) ) ? thisPluginConfig.forceRhino as Boolean : false
+			coffeeCompilerManager.forceNode = ( thisPluginConfig.containsKey( "forceNode" ) ) ? thisPluginConfig.forceNode as Boolean : false
 			coffeeCompilerManager.compileFromConfig( application.config )
 			startUpComplete = true
 		}
